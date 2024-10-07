@@ -5,3 +5,4 @@
 
 ![](https://github.com/Sungileo/Byte-King/blob/main/jobdongsaney/danchesajin.jpg?raw=true)
 
+진호 참가완료
