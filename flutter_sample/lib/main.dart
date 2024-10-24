@@ -1,93 +1,116 @@
-import 'dart:math';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:codia_demo_flutter/codia_page.dart';
 
 void main() {
   runApp(const MyApp());
-
-  if (Platform.isMacOS) {
-    const winSize = Size(426, 800);
-    appWindow.size = winSize;
-    appWindow.show();
-    doWhenWindowReady(() {
-      final win = appWindow;
-      win.size = winSize;
-      win.alignment = Alignment.center;
-      win.show();
-    });
-  }
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var paqe = Platform.isMacOS ? const MacOSPage() : SingleChildScrollView(child: CodiaPage());
     return MaterialApp(
-      title: 'CodiaDemoFlutter',
+      title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        // tested with just a hot reload.
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: paqe,
+      home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MacOSPage extends StatefulWidget {
-  const MacOSPage({super.key});
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+
+
+  final String title;
 
   @override
-  State<StatefulWidget> createState() => _MacOSPage();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MacOSPage extends State<MacOSPage> {
-  final ScrollController _horizontalScrollController = ScrollController();
-  final ScrollController _verticalScrollController = ScrollController();
+
+
+
+
+
+
+
+
+
+
+
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Builder(builder: (BuildContext context) {
-      MediaQueryData mediaQueryData = MediaQuery.of(context);
-      Size codiaPageSize = const Size(426, 800);
-      Size windowSize = mediaQueryData.size;
-      double widthScale = windowSize.width / codiaPageSize.width;
-      double heightScale = windowSize.height / codiaPageSize.height;
-      double scale = [1.0, widthScale, heightScale].reduce(max);
-
-      return Scrollbar(
-        controller: _verticalScrollController,
-        thumbVisibility: true,
-        notificationPredicate: (ScrollNotification notification) => notification.depth == 1,
-        child: Scrollbar(
-          controller: _horizontalScrollController,
-          thumbVisibility: true,
-          child: Transform.scale(
-            scale: scale,
-            alignment: Alignment.topLeft,
-            child: OverflowBox(
-              alignment: Alignment.topLeft,
-              child: SingleChildScrollView(
-                controller: _horizontalScrollController,
-                scrollDirection: Axis.horizontal,
-                child: SizedBox(
-                  width: codiaPageSize.width,
-                  height: codiaPageSize.height,
-                  child: SingleChildScrollView(
-                    controller: _verticalScrollController,
-                    scrollDirection: Axis.vertical,
-                    child: CodiaPage(),
-                  ),
-                ),
-              ),
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: Center(
+        // Center is a layout widget. It takes a single child and positions it
+        // in the middle of the parent.
+        child: Column(
+          // Column is also a layout widget. It takes a list of children and
+          // arranges them vertically. By default, it sizes itself to fit its
+          // children horizontally, and tries to be as tall as its parent.
+          //
+          // Column has various properties to control how it sizes itself and
+          // how it positions its children. Here we use mainAxisAlignment to
+          // center the children vertically; the main axis here is the vertical
+          // axis because Columns are vertical (the cross axis would be
+          // horizontal).
+          //
+          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
+          // action in the IDE, or press "p" in the console), to see the
+          // wireframe for each widget.
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
             ),
-          ),
+            Text(
+              '$_counter',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+          ],
         ),
-      );
-    });
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _incrementCounter,
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
   }
 }
